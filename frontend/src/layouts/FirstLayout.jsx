@@ -4,7 +4,7 @@ import Sidebar from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
 
 const FirstLayout = () => {
-  const [isSidebarVisible, setIsSideBarVisible] = useState(false);
+  const [isSidebarVisible, setIsSideBarVisible] = useState(true);
 
   const toggleSidebar = () => {
     setIsSideBarVisible(!isSidebarVisible);

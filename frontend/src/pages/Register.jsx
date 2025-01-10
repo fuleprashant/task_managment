@@ -78,7 +78,7 @@ const Register = () => {
         <p className="text-center text-gray-600 text-sm mt-4">
           Already have an account?{" "}
           <NavLink
-            href="/auth/login"
+            to="/auth/login"
             className="text-purple-600 font-medium hover:underline"
           >
             Log In

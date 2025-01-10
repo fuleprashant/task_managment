@@ -1,5 +1,5 @@
 import React from "react";
-
+import { NavLink } from "react-router-dom";
 const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-200 via-purple-300 to-pink-200">
@@ -61,7 +61,7 @@ const Login = () => {
         <p className="text-center text-sm text-gray-600 mt-6">
           Don't have an account?{" "}
           <NavLink
-            href="/auth/register"
+            to="/auth/register"
             className="text-purple-600 hover:underline"
           >
             Register here

@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Card from "../components/Card";
 
 const InCompleted = () => {
   return (
-    <div>InCompleted</div>
-  )
-}
+    <div>
+      <Card addData={false} />
+    </div>
+  );
+};
 
-export default InCompleted
+export default InCompleted;

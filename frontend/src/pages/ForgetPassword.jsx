@@ -1,13 +1,13 @@
 import React from "react";
 import Card from "../components/Card";
 
-const Important = () => {
+const ForgetPassword = () => {
   return (
     <div>
      
-      <Card addData={false} />
+      <Card />
     </div>
   );
 };
 
-export default Important;
+export default ForgetPassword;
