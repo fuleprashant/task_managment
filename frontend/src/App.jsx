@@ -1,8 +1,19 @@
 import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import FirstLayout from "./layouts/FirstLayout";
 
 const App = () => {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <FirstLayout />,
+      
+    },
+  ]);
   return (
-    <div className="text-2xl bg-red-600">this is the main application</div>
+    <div>
+      <RouterProvider router={router} />
+    </div>
   );
 };
 
