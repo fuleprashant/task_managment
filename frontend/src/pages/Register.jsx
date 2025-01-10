@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const Register = () => {
   return (
@@ -76,12 +77,12 @@ const Register = () => {
         </form>
         <p className="text-center text-gray-600 text-sm mt-4">
           Already have an account?{" "}
-          <a
+          <NavLink
             href="/auth/login"
             className="text-purple-600 font-medium hover:underline"
           >
             Log In
-          </a>
+          </NavLink>
         </p>
       </div>
     </div>

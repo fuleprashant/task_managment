@@ -1,11 +1,11 @@
 import React from "react";
 import { CiMenuBurger } from "react-icons/ci";
 
-const Navbar = () => {
+const Navbar = ({ isSidebarVisible }) => {
   return (
     <div className="h-16 flex items-center justify-between mx-5  ">
       <div className="flex gap-4">
-        <div>
+        <div className="mt-3" onClick={isSidebarVisible}>
           <CiMenuBurger size={24} />
         </div>
         <div>

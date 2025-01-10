@@ -60,9 +60,12 @@ const Login = () => {
         </form>
         <p className="text-center text-sm text-gray-600 mt-6">
           Don't have an account?{" "}
-          <a href="/auth/register" className="text-purple-600 hover:underline">
+          <NavLink
+            href="/auth/register"
+            className="text-purple-600 hover:underline"
+          >
             Register here
-          </a>
+          </NavLink>
         </p>
       </div>
     </div>
