@@ -4,11 +4,13 @@ import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
   return (
-    <div>
+    <div className="flex flex-col h-screen">
       <div>
         <Navbar />
       </div>
-      <Outlet />
+      <div className="flex-grow overflow-hidden">
+        <Outlet />
+      </div>
     </div>
   );
 };
