@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const ForgetPassword = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex justify-center items-center  mt-64 ">
+    <div className="flex justify-center items-center h-screen  bg-slate-700 ">
       <div className="w-full max-w-md  p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Forgot Password

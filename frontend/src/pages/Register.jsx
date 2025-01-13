@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 const Register = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-200 via-purple-300 to-pink-200">
+    <div className="min-h-screen flex items-center justify-center bg-slate-700">
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-4">
           Create an Account
