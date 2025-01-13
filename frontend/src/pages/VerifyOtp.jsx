@@ -1,12 +1,18 @@
-import React from "react";
-import { useRef } from "react";
+import React, { useRef } from "react";
 
 const VerifyOtp = () => {
   const inputrefs = useRef([]);
 
   const handleInput = (e, index) => {
+    // If value length is more than 1 character, it should focus on the next input.
     if (e.target.value.length > 0 && index < inputrefs.current.length - 1) {
       inputrefs.current[index + 1].focus();
+    }
+  };
+
+  const handleBackspace = (e, index) => {
+    if (e.key === "Backspace" && index > 0 && !inputrefs.current[index].value) {
+      inputrefs.current[index - 1].focus(); // Focus on the previous input if the current input is empty
     }
   };
 
@@ -28,8 +34,9 @@ const VerifyOtp = () => {
 
     e.preventDefault(); // Prevent default paste behavior to control it manually
   };
+
   return (
-    <div className="flex items-center justify-center h-screen  bg-slate-700">
+    <div className="flex items-center justify-center h-screen bg-slate-700">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Verify OTP
@@ -47,11 +54,10 @@ const VerifyOtp = () => {
                 key={idx}
                 required
                 className="w-12 h-12 text-2xl text-center rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                // ref={(e) => (inputrefs.current[index] = e)}
-                // onInput={(e) => handleInput(e, index)}
                 ref={(el) => (inputrefs.current[idx] = el)}
                 onInput={(e) => handleInput(e, idx)}
                 onPaste={handlePaste} // Listen to paste event
+                onKeyDown={(e) => handleBackspace(e, idx)} // Handle backspace key
               />
             ))}
         </div>
