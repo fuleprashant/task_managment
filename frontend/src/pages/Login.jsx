@@ -47,9 +47,12 @@ const Login = () => {
               />
               <span className="ml-2">Remember me</span>
             </label>
-            <a href="#" className="text-sm text-purple-600 hover:underline">
+            <NavLink
+              to="/auth/forgetpassword"
+              className="text-sm text-purple-600 hover:underline"
+            >
               Forgot Password?
-            </a>
+            </NavLink>
           </div>
           <button
             type="submit"

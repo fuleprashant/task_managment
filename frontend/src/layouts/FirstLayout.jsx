@@ -14,13 +14,13 @@ const FirstLayout = () => {
       <div className=" bg-slate-500">
         <Navbar isSidebarVisible={toggleSidebar} />
       </div>
-      <div className="flex  flex-grow">
+      <div className="flex  flex-grow overflow-hidden ">
         {isSidebarVisible && (
-          <div className="w-48 sm:w-64  bg-slate-700 h-full ">
+          <div className="w-48  sm:w-64  bg-slate-700  ">
             <Sidebar />
           </div>
         )}
-        <div className>
+        <div className=" flex-grow h-full bg-slate-600 overflow-auto ">
           <Outlet />
         </div>
       </div>

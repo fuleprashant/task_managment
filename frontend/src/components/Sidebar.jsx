@@ -56,7 +56,7 @@ const Sidebar = () => {
           </NavLink>
         ))}
       </div>
-      <div className="hover:bg-slate-600  mt-64">
+      <div className="hover:bg-slate-600  mt-56">
         <div className=" ml-5  font-thin  w-full">
           <div className=" ">
             <NavLink

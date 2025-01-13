@@ -9,6 +9,10 @@ import InCompleted from "./pages/InCompleted";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import AuthLayout from "./layouts/AuthLayout";
+import AddTask from "./pages/AddTask";
+import ForgetPassword from "./pages/ForgetPassword";
+import ResetPassword from "./pages/ResetPassword";
+import VerifyOtp from "./pages/VerifyOtp";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -23,6 +27,10 @@ const App = () => {
         {
           path: "alltask",
           element: <AllTask />,
+        },
+        {
+          path: "addtask",
+          element: <AddTask />,
         },
         {
           path: "impotanttask",
@@ -49,6 +57,18 @@ const App = () => {
         {
           path: "login",
           element: <Login />,
+        },
+        {
+          path: "forgetpassword",
+          element: <ForgetPassword />,
+        },
+        {
+          path: "resetpassword",
+          element: <ResetPassword />,
+        },
+        {
+          path: "verifyotp",
+          element: <VerifyOtp />,
         },
       ],
     },
