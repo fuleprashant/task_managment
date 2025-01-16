@@ -11,12 +11,12 @@ const FirstLayout = () => {
   };
   return (
     <div className="bg-slate-600 h-screen flex flex-col">
-      <div className=" bg-slate-500">
+      <div className=" bg-slate-500 ">
         <Navbar isSidebarVisible={toggleSidebar} />
       </div>
       <div className="flex  flex-grow  ">
         {isSidebarVisible && (
-          <div className="w-48  sm:w-64  bg-slate-700  ">
+          <div className="w-48  sm:w-64  bg-slate-700   ">
             <Sidebar setIsSideBarVisible={setIsSideBarVisible} />
           </div>
         )}

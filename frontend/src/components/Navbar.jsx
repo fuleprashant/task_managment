@@ -3,7 +3,7 @@ import { CiMenuBurger } from "react-icons/ci";
 
 const Navbar = ({ isSidebarVisible }) => {
   return (
-    <div className="h-16 flex items-center justify-between mx-5  ">
+    <div className="h-16 flex items-center justify-between mx-5 ">
       <div className="flex gap-4">
         <div className="mt-3" onClick={isSidebarVisible}>
           <CiMenuBurger size={24} />

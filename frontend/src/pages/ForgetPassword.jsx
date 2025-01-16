@@ -1,15 +1,41 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+// Validation schema for the form
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Plz enter your registerd Email it's required"),
+});
 
 const ForgetPassword = () => {
+  const {
+    register,
+    handleSubmit, // added handleSubmit
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   const navigate = useNavigate();
+
+  // Form submission handler
+  const onSubmit = (data) => {
+    console.log("Email submitted:", data.email);
+    navigate("/auth/verifyotp");
+  };
+
   return (
-    <div className="flex justify-center items-center h-screen  bg-slate-700 ">
-      <div className="w-full max-w-md  p-8 rounded-lg shadow-lg">
+    <div className="flex justify-center items-center h-screen bg-slate-700">
+      <div className="w-full max-w-md p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Forgot Password
         </h2>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label
               className="block text-sm font-medium text-gray-600"
@@ -20,13 +46,18 @@ const ForgetPassword = () => {
             <input
               type="email"
               id="email"
+              {...register("email")}
               placeholder="Email Address"
-              required
               className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
           <button
-            onClick={() => navigate("/auth/verifyotp")}
+            type="submit" // changed onClick to type="submit"
             className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
             Send OTP

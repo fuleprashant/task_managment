@@ -1,7 +1,14 @@
 import React from "react";
 import img from "../../public/contact_img.png";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/alltask"); // Navigate to the /alltask route
+  };
+
   return (
     <div className="min-h-screen  flex items-center justify-center">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 max-w-6xl rounded-lg shadow-lg">
@@ -15,7 +22,7 @@ const Home = () => {
             this is my full otp and reset and forget password functionality
             project....
           </p>
-          <button className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow hover:bg-blue-700 transition">
+          <button className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow hover:bg-blue-700 transition" onClick={handleNavigate}>
             Get Started
           </button>
         </div>

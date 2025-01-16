@@ -1,27 +1,39 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+// Define validation schema using Yup
+const schema = yup.object().shape({
+  currentPassword: yup.string().required("Current password is required"),
+  newPassword: yup
+    .string()
+    .min(6, "Password must be at least 6 characters long")
+    .required("New password is required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("newPassword"), null], "Passwords must match")
+    .required("Confirm password is required"),
+});
 
 const ResetPassword = () => {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  // Initialize react-hook-form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Basic validation to check if passwords match
-    if (newPassword !== confirmPassword) {
-      setError("New password and confirmation do not match.");
-      return;
-    }
-
+  const onSubmit = (data) => {
     // Mock submission - replace with actual API call
-    setTimeout(() => {
-      setSuccess(true);
-      setError("");
-    }, 1000);
+    console.log("Form submitted:", data);
+    setSuccess(true);
+    setError("");
   };
+
+  const [success, setSuccess] = React.useState(false);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-slate-700">
@@ -29,7 +41,7 @@ const ResetPassword = () => {
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           Reset Your Password
         </h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label htmlFor="newPassword" className="block text-gray-700">
               New Password
@@ -37,12 +49,16 @@ const ResetPassword = () => {
             <input
               type="password"
               id="newPassword"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
+              {...register("newPassword")}
               className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.newPassword && (
+              <div className="text-red-500 text-sm mt-2">
+                {errors.newPassword.message}
+              </div>
+            )}
           </div>
+
           <div className="mb-4">
             <label htmlFor="confirmPassword" className="block text-gray-700">
               Confirm New Password
@@ -50,14 +66,16 @@ const ResetPassword = () => {
             <input
               type="password"
               id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
+              {...register("confirmPassword")}
               className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.confirmPassword && (
+              <div className="text-red-500 text-sm mt-2">
+                {errors.confirmPassword.message}
+              </div>
+            )}
           </div>
 
-          {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
           {success && (
             <div className="text-green-500 text-sm mb-4">
               Password reset successfully!

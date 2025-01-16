@@ -1,7 +1,36 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
+const schema = yup.object().shape({
+  fullname: yup.string().required("Full name is required"),
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters long")
+    .required("Password is required"),
+  confirm_password: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match")
+    .required("Confirm Password is required"),
+});
+
+const onsubmit = (data) => {
+  console.log("form submitted", data);
+};
 const Register = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-700">
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
@@ -11,7 +40,7 @@ const Register = () => {
         <p className="text-center text-gray-600 mb-6">
           Join us today! It's quick and easy.
         </p>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit(onsubmit)}>
           <div>
             <label
               htmlFor="name"
@@ -22,9 +51,15 @@ const Register = () => {
             <input
               type="text"
               id="name"
+              {...register("fullname")}
               placeholder="Enter your name"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             />
+            {errors.fullname && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.fullname.message}
+              </p>
+            )}
           </div>
           <div>
             <label
@@ -36,9 +71,15 @@ const Register = () => {
             <input
               type="email"
               id="email"
+              {...register("email")}
               placeholder="Enter your email"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
           <div>
             <label
@@ -50,9 +91,15 @@ const Register = () => {
             <input
               type="password"
               id="password"
+              {...register("password")}
               placeholder="Enter your password"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             />
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
           <div>
             <label
@@ -64,9 +111,15 @@ const Register = () => {
             <input
               type="password"
               id="confirm-password"
+              {...register("confirm_password")}
               placeholder="Confirm your password"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
             />
+            {errors.confirm_password && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.confirm_password.message}
+              </p>
+            )}
           </div>
           <button
             type="submit"

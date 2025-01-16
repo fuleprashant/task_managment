@@ -1,6 +1,34 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters long")
+    .required("Password is required"),
+});
+
+// submit handler function
+
+const onSubmit = (data) => {
+  console.log("Form submitted successfully", data);
+};
+
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-700">
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
@@ -10,7 +38,7 @@ const Login = () => {
         <p className="text-center text-gray-600 mb-6">
           Please login to your account
         </p>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <div>
             <label
               htmlFor="email"
@@ -21,9 +49,15 @@ const Login = () => {
             <input
               type="email"
               id="email"
+              {...register("email")}
               placeholder="Enter your email"
               className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
           <div>
             <label
@@ -35,9 +69,15 @@ const Login = () => {
             <input
               type="password"
               id="password"
+              {...register("password")}
               placeholder="Enter your password"
               className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
           <div className="flex justify-between items-center">
             <label className="flex items-center text-sm text-gray-600">
