@@ -216,7 +216,10 @@ export const login = async (req, res) => {
     // Generate JWT token if login is successful
     const token = generateToken(user); // Corrected typo
     // Set token in cookies (1 hour expiration)
-    res.cookie("jwttoken", token, { maxAge: 3600000 });
+    // res.cookie("jwttoken", token, { maxAge: 3600000 });
+
+    // below is the hint how can we set in the headers
+    res.setHeader("Authorization", `Bearer ${token}`);
 
     return res.status(200).json({
       success: true,
