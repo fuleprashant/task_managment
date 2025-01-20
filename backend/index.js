@@ -4,6 +4,7 @@ import db from "./database/db.js";
 import router from "./routes/user.route.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
 
 const app = express();
 // console.log(app);
@@ -18,6 +19,7 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(cookieParser());
 app.use("/user", router);
 
 app.listen(port, () => {

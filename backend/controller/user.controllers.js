@@ -243,7 +243,7 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   //   console.log("You clicked the logout button");
   try {
-    res.clearCookie("jwttokenss");
+    res.clearCookie("jwttoken");
     return res.status(200).json({
       message: "User logged out succesfully",
     });
