@@ -9,8 +9,10 @@ dotenv.config();
 const port = process.env.PORT;
 db();
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use("/user", router);
 
 app.listen(port, () => {
