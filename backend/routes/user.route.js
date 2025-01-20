@@ -8,14 +8,15 @@ import {
   signUp,
   verifyOtp,
 } from "../controller/user.controllers.js";
+import upload from "../middleware/multermiddle.js";
 
 const router = express.Router();
 
-router.post("/signup", signUp);
+router.post("/signup", upload.single("profilePicture"), signUp);
 router.post("/verifyotp", verifyOtp);
 router.post("/login", login);
 router.post("/logout", logout);
 router.post("/forgetpassword", forget_password);
 router.post("/resetpassword", reset_password);
 
-export default router     
+export default router;

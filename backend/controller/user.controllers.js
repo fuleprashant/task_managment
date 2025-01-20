@@ -5,7 +5,7 @@ import { generateToken } from "../middleware/generateToken.js";
 
 export const signUp = async (req, res) => {
   try {
-    const { fullname, email, password } = req.body;
+    const { fullname, email, password, profilePicture } = req.body;
 
     // Check if all required fields are provided
     if (!fullname || !email || !password) {
@@ -37,6 +37,7 @@ export const signUp = async (req, res) => {
       password: hashedPassword,
       accountVerified: false,
       OTPemail,
+      profilePicture, // Store the profile picture path
       OTPExpire: Date.now() + 10 * 60 * 1000,
     });
 
@@ -59,6 +60,7 @@ export const signUp = async (req, res) => {
         id: newUser._id,
         fullname: newUser.fullname,
         email: newUser.email,
+        profilePicture: newUser.profilePicture, // Include profile picture URL in the response
         accountVerified: false,
       },
     });

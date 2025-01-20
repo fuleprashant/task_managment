@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import db from "./database/db.js";
 import router from "./routes/user.route.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 // console.log(app);
@@ -9,12 +11,15 @@ dotenv.config();
 const port = process.env.PORT;
 db();
 
+// Fix __dirname for ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/user", router);
 
 app.listen(port, () => {
-  console.log(`the server run on the port of the http://localhost:${port}`);
+  console.log(`The server is running at http://localhost:${port}`);
 });
