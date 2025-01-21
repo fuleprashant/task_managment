@@ -5,12 +5,14 @@ import {
   allTask,
   createTask,
   deleteTask,
+  updateTask,
 } from "../controller/task.controllers.js";
 
 const taskRouter = express.Router();
 
 taskRouter.post("/create-task", useMiddleware, createTask);
 taskRouter.get("/alltask", useMiddleware, allTask);
-taskRouter.post("/deletetask/:taskId", useMiddleware, deleteTask);
+taskRouter.delete("/deletetask/:taskId", useMiddleware, deleteTask);
+taskRouter.put("/updatetask/:taskId", useMiddleware, updateTask);
 
 export default taskRouter;

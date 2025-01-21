@@ -114,3 +114,31 @@ export const deleteTask = async (req, res) => {
     res.status(400).json({ message: "Error occurred while deleting task" });
   }
 };
+
+export const updateTask = async (req, res) => {
+  const { taskId } = req.params;
+  const { task, description } = req.body;
+
+  try {
+    // find the task by id and update it
+    const updateTask = await Task.findByIdAndUpdate(
+      taskId,
+      { task, description },
+      { new: true }
+    );
+
+    // If no task is found, return a 404 error
+    if (!updateTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    // Return a success response with the updated task
+    res.status(200).json({
+      message: "Task updated successfully",
+      updateTask,
+    });
+  } catch (error) {
+    console.error("Error occurred while updating task:", error);
+    res.status(400).json({ message: "Error occurred while updating task" });
+  }
+};
