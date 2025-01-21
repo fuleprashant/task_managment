@@ -35,3 +35,31 @@ export const createTask = async (req, res) => {
     res.status(400).json({ message: "Error occurred while creating task" });
   }
 };
+
+export const allTask = async (req, res) => {
+  const user = req.user;
+
+  // if task is not in that at that user
+  if (!user) {
+    return res.status(400).json({ message: "User is not authenticated" });
+  }
+
+  try {
+    const tasks = await Task.find({ userId: user._id });
+
+    // check if the task is zero
+    if (tasks.lenght === 0) {
+      return res.status(404).json({ message: "No tasks found for this user" });
+    }
+
+    res.status(200).json({
+      message: "Tasks retrieved successfully",
+      tasks,
+    });
+  } catch (error) {
+    console.error("Error occurred while retrieving tasks:", error);
+    res.status(400).json({ message: "Error occurred while retrieving tasks" });
+  }
+};
+
+
