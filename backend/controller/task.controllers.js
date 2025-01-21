@@ -170,3 +170,29 @@ export const complated = async (req, res) => {
       .json({ message: "Error occuring while complated the Task" });
   }
 };
+
+// important task api is below
+export const important = async (req, res) => {
+  const { taskId } = req.params;
+  const { important } = req.body;
+
+  try {
+    const importantTask = await Task.findByIdAndUpdate(
+      taskId,
+      { important },
+      { new: true }
+    );
+
+    if (!importantTask) {
+      return res.status(404).json({ message: "importantTask not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Task Completed  successfully", importantTask });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "Error occuring while important the Task" });
+  }
+};
