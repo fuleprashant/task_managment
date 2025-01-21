@@ -62,4 +62,55 @@ export const allTask = async (req, res) => {
   }
 };
 
+// export const deleteTask = async (req, res) => {
+//     const user = req.user;
+//     const { taskId } = req.params;
 
+//     if (!user) {
+//       return res.status(400).json({ message: "User is not authenticated" });
+//     }
+
+//     try {
+//       // Use findOne to get a single task document
+//       const task = await Task.findOne({ _id: taskId, userId: user._id });
+
+//       // If no task is found, return a 404 error
+//       if (!task) {
+//         return res
+//           .status(404)
+//           .json({ message: "Task not found or does not belong to the user" });
+//       }
+
+//       // Use deleteOne instead of remove to delete the task
+//       await Task.deleteOne({ _id: taskId });
+
+//       res.status(200).json({
+//         message: "Task deleted successfully",
+//       });
+//     } catch (error) {
+//       console.error("Error occurred while deleting task:", error);
+//       res.status(400).json({ message: "Error occurred while deleting task" });
+//     }
+//   };
+
+export const deleteTask = async (req, res) => {
+  const { taskId } = req.params; // Extract task ID from the request parameters
+
+  try {
+    const deletedTask = await Task.findByIdAndDelete(taskId);
+
+    // If no task is found, return a 404 error
+    if (!deletedTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    // Return a success response with the deleted task
+    res.status(200).json({
+      message: "Task deleted successfully",
+      deletedTask,
+    });
+  } catch (error) {
+    console.error("Error occurred while deleting task:", error);
+    res.status(400).json({ message: "Error occurred while deleting task" });
+  }
+};
