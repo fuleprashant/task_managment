@@ -16,14 +16,17 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: function () {
-        return !this.googleId;
+      validate: {
+        validator: function () {
+          return !this.googleId;
+        },
+        message: "Password is required if Google ID is not provided.",
       },
     },
     googleId: {
-      type: String, // For Google OAuth users
+      type: String,
       unique: true,
-      sparse: true, // Allows null or missing values but enforces uniqueness if present
+      sparse: true,
     },
     accountVerified: {
       type: Boolean,
@@ -41,20 +44,26 @@ const userSchema = new mongoose.Schema(
       type: String,
       select: false,
     },
-    OTpExpireforpassword: {
+    OTPExpireForPassword: {
+      // Fixed inconsistent spelling
       type: Date,
       select: false,
     },
     profilePicture: {
       type: String,
       default:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREh8TIFWYXVR4v4TeSVn20PTQ5WNaF5IteeQ&s",
+        process.env.DEFAULT_PROFILE_PICTURE ||
+        "https://example.com/default-profile-picture",
     },
+    tasks: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Task", // Fixed case sensitivity
+      },
+    ],
   },
   { timestamps: true }
 );
 
-
 const User = mongoose.model("User", userSchema);
-
 export default User;
