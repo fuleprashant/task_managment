@@ -142,3 +142,31 @@ export const updateTask = async (req, res) => {
     res.status(400).json({ message: "Error occurred while updating task" });
   }
 };
+
+// complated task api is below
+export const complated = async (req, res) => {
+  // console.log("completed api is trigrred");
+  const { taskId } = req.params;
+  const { completed } = req.body;
+
+  try {
+    const completeTask = await Task.findByIdAndUpdate(
+      taskId,
+      { completed },
+      { new: true }
+    );
+
+    if (!completeTask) {
+      return res.status(404).json({ message: "completeTask not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Task Completed  successfully", completeTask });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(400)
+      .json({ message: "Error occuring while complated the Task" });
+  }
+};
