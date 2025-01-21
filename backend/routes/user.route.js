@@ -11,13 +11,13 @@ import {
 import upload from "../middleware/multermiddle.js";
 import { useMiddleware } from "../middleware/userMiddleware.js";
 
-const router = express.Router();
+const userRouter = express.Router();
 
-router.post("/signup", upload.single("profilePicture"), signUp);
-router.post("/verifyotp", verifyOtp);
-router.post("/login", login);
-router.post("/forgetpassword", forget_password);
-router.post("/resetpassword", reset_password);
-router.get("/logout", useMiddleware, logout);
+userRouter.post("/signup", upload.single("profilePicture"), signUp);
+userRouter.post("/verifyotp", verifyOtp);
+userRouter.post("/login", login);
+userRouter.post("/forgetpassword", forget_password);
+userRouter.post("/resetpassword", reset_password);
+userRouter.get("/logout", useMiddleware, logout);
 
-export default router;
+export default userRouter;

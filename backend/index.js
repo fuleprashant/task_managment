@@ -1,10 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
 import db from "./database/db.js";
-import router from "./routes/user.route.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
+import userRouter from "./routes/user.route.js";
+import taskRouter from "./routes/task.route.js";
 
 const app = express();
 // console.log(app);
@@ -20,7 +21,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser());
-app.use("/user", router);
+// app.use("/user", userRouter);
+// app.use("/user", taskRouter);
+app.use("/user", [userRouter, taskRouter]);
 
 app.listen(port, () => {
   console.log(`The server is running at http://localhost:${port}`);

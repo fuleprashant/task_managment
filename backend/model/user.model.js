@@ -57,8 +57,8 @@ const userSchema = new mongoose.Schema(
     },
     tasks: [
       {
-        type: mongoose.Types.ObjectId,
-        ref: "Task", // Fixed case sensitivity
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Task", // Reference to Task model
       },
     ],
   },
