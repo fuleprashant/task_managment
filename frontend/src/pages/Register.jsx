@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -18,12 +18,47 @@ const schema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password is required"),
+  profilePicture: yup
+    .mixed()
+    .test("fileSize", "The file is too large", (value) => {
+      return !value || (value[0] && value[0].size <= 2 * 1024 * 1024); // 2MB limit
+    })
+    .test("fileType", "Unsupported file type", (value) => {
+      return (
+        !value ||
+        (value[0] &&
+          ["image/jpeg", "image/png", "image/jpg"].includes(value[0].type))
+      );
+    }),
 });
 
+// const onsubmit = (data) => {
+//   console.log("form submitted", data);
+// };
+
 const onsubmit = (data) => {
-  console.log("form submitted", data);
+  console.log("old", data);
+
+  // Ensure that profilePicture is an array or FileList object
+  if (data.profilePicture && data.profilePicture.length > 0) {
+    const formData = new FormData();
+    formData.append("fullname", data.fullname);
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+    formData.append("profilePicture", data.profilePicture[0]); // Append file
+
+    console.log("Form Data Submitted:");
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+  } else {
+    console.log("No file selected.");
+  }
+
+  // The reason you're using FormData.append() in your code is to prepare the form data in a way that can be easily submitted via an HTTP request, especially when you're working with files (like profile pictures). Here's a breakdown of why FormData is necessary and why you need to append data in this way:
 };
 const Register = () => {
+  const [preview, setPreview] = useState(null);
   const {
     register,
     handleSubmit,
@@ -31,6 +66,13 @@ const Register = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPreview(URL.createObjectURL(file)); // Create a preview URL for the image
+    }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-700">
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
@@ -41,6 +83,34 @@ const Register = () => {
           Join us today! It's quick and easy.
         </p>
         <form className="space-y-4" onSubmit={handleSubmit(onsubmit)}>
+          <div>
+            <label
+              htmlFor="profilePicture"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Profile Picture
+            </label>
+            <input
+              type="file"
+              id="profilePicture"
+              {...register("profilePicture")}
+              accept="image/jpeg, image/png, image/jpg"
+              className="mt-1 block w-full text-gray-800"
+              onChange={handleFileChange}
+            />
+            {errors.profilePicture && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.profilePicture.message}
+              </p>
+            )}
+            {preview && (
+              <img
+                src={preview}
+                alt="Profile picture"
+                className="mt-2 w-24 h-24 rounded-full object-cover"
+              />
+            )}
+          </div>
           <div>
             <label
               htmlFor="name"
@@ -61,6 +131,7 @@ const Register = () => {
               </p>
             )}
           </div>
+          {/* Email  */}
           <div>
             <label
               htmlFor="email"
@@ -81,6 +152,7 @@ const Register = () => {
               </p>
             )}
           </div>
+          {/* Password */}
           <div>
             <label
               htmlFor="password"
@@ -101,6 +173,7 @@ const Register = () => {
               </p>
             )}
           </div>
+          {/* Confirm password*/}
           <div>
             <label
               htmlFor="confirm-password"
