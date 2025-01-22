@@ -79,7 +79,10 @@ const App = () => {
     <div>
       <RouterProvider router={router} />
       {/* ToastContainer holds the toast notifications */}
-      <ToastContainer />
+      <ToastContainer
+        position="top-right" // You can also use 'top-left', 'bottom-left', or 'bottom-right'
+        autoClose={5000} // Auto close after 5 seconds
+      />
     </div>
   );
 };

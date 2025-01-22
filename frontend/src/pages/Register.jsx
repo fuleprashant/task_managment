@@ -53,10 +53,7 @@ const onsubmit = (data) => {
       console.log(key, value);
     }
 
-    toast.success("formdata added successfully!", {
-      position: toast.POSITION?.TOP_RIGHT,
-      autoClose: 1000, // Auto close after 5 seconds
-    });
+    toast.success("formdata added successfully!");
   } else {
     console.log("No file selected.");
   }
