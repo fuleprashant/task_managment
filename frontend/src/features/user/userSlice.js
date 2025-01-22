@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const token = localStorage.getItem("token");
 const initialState = {
   user: null,
-  isAuthenticated: false,
+  isAuthenticated: !!token,
   loading: false,
   error: null,
   otpVerified: false,
@@ -12,6 +13,41 @@ export const userSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    registrationStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+
+    // Handle registration success
+    registrationSuccess: (state, action) => {
+      // Log the payload to check the structure
+      console.log("Payload in registrationSuccess:", action.payload);
+
+      const user = action.payload.user;
+
+      if (user) {
+        // Safely create the user object with email and fullname
+        const theUser = {
+          email: user.email,
+          fullname: user.fullname,
+        };
+
+        // Store user data in localStorage if available
+        localStorage.setItem("user", JSON.stringify(theUser));
+      } else {
+        console.error("User data is missing in the payload.");
+      }
+
+      state.user = user;
+      state.loading = false;
+      state.error = null;
+    },
+
+    // Handle registration failure
+    registrationFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload; // error message
+    },
     // start the login process (set loading state to true)
     loginStart: (state) => {
       state.loading = true;
@@ -77,6 +113,9 @@ export const {
   otpVerifySuccess,
   otpVerifyFailure,
   logout,
+  registrationFailure,
+  registrationSuccess,
+  registrationStart,
 } = userSlice.actions;
 
 // Export the reducer to include in the store

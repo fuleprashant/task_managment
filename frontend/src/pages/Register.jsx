@@ -1,8 +1,15 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import {
+  registrationFailure,
+  registrationStart,
+  registrationSuccess,
+} from "../features/user/userSlice";
 import { toast } from "react-toastify";
 
 const schema = yup.object().shape({
@@ -37,31 +44,10 @@ const schema = yup.object().shape({
 //   console.log("form submitted", data);
 // };
 
-const onsubmit = (data) => {
-  console.log("old", data);
-
-  // Ensure that profilePicture is an array or FileList object
-  if (data.profilePicture && data.profilePicture.length > 0) {
-    const formData = new FormData();
-    formData.append("fullname", data.fullname);
-    formData.append("email", data.email);
-    formData.append("password", data.password);
-    formData.append("profilePicture", data.profilePicture[0]); // Append file
-
-    console.log("Form Data Submitted:");
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-
-    toast.success("formdata added successfully!");
-  } else {
-    console.log("No file selected.");
-  }
-
-  // The reason you're using FormData.append() in your code is to prepare the form data in a way that can be easily submitted via an HTTP request, especially when you're working with files (like profile pictures). Here's a breakdown of why FormData is necessary and why you need to append data in this way:
-};
 const Register = () => {
   const [preview, setPreview] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -69,6 +55,83 @@ const Register = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  // const onsubmit = async (data) => {
+  //   console.log("old", data);
+
+  //   dispatch(registrationStart());
+
+  //   // Ensure that profilePicture is an array or FileList object
+  //   if (data.profilePicture && data.profilePicture.length > 0) {
+  //     const formData = new FormData();
+  //     formData.append("fullname", data.fullname);
+  //     formData.append("email", data.email);
+  //     formData.append("password", data.password);
+  //     formData.append("profilePicture", data.profilePicture[0]); // Append file
+
+  //     const response = await axios.post(
+  //       "http://localhost:7985/user/signup",
+  //       formData,
+  //       {
+  //         withCredentials: true,
+  //       }
+  //     );
+  //     try {
+
+  //       dispatch(registrationSuccess({ user: response.data.data }));
+  //     } catch (error) {
+  //       dispatch(registrationFailure({ error: error.response.data.message }));
+  //     }
+  //   } else {
+  //     console.log("No file selected.");
+  //   }
+
+  //   // The reason you're using FormData.append() in your code is to prepare the form data in a way that can be easily submitted via an HTTP request, especially when you're working with files (like profile pictures). Here's a breakdown of why FormData is necessary and why you need to append data in this way:
+  // };
+
+  const onsubmit = async (data) => {
+    console.log("old", data);
+
+    dispatch(registrationStart());
+
+    // Ensure that profilePicture is an array or FileList object
+    if (data.profilePicture && data.profilePicture.length > 0) {
+      const formData = new FormData();
+      formData.append("fullname", data.fullname);
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      formData.append("profilePicture", data.profilePicture[0]); // Append file
+
+      try {
+        const response = await axios.post(
+          "http://localhost:7985/user/signup",
+          formData,
+          {
+            withCredentials: true,
+          }
+        );
+
+        // Dispatch success if registration is successful
+        dispatch(registrationSuccess({ user: response.data.data }));
+        toast.success(response.data.message);
+        navigate("/auth/verifyotp");
+      } catch (error) {
+        // Handle error by dispatching failure action
+        if (error.response) {
+          // Access the error message sent from the backend
+          dispatch(registrationFailure(error.response.data.message));
+          toast.error(error.response.data.message);
+        } else {
+          // Handle error if no response (network issues, server issues, etc.)
+          dispatch(
+            registrationFailure({ error: "An unexpected error occurred." })
+          );
+        }
+      }
+    } else {
+      console.log("No file selected.");
+    }
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
