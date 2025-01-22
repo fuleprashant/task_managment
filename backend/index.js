@@ -4,6 +4,7 @@ import db from "./database/db.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import userRouter from "./routes/user.route.js";
 import taskRouter from "./routes/task.route.js";
 
@@ -23,6 +24,14 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser());
 // app.use("/user", userRouter);
 // app.use("/user", taskRouter);
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: ["Content-Type"],
+  })
+);
 app.use("/user", [userRouter, taskRouter]);
 
 app.listen(port, () => {

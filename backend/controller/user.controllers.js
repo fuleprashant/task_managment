@@ -5,8 +5,18 @@ import { generateToken } from "../middleware/generateToken.js";
 
 export const signUp = async (req, res) => {
   try {
-    const { fullname, email, password, profilePicture } = req.body;
+    const { fullname, email, password } = req.body;
+    let profilePicture = null;
 
+    // Check if the profilePicture file is present
+    if (req.file) {
+      profilePicture = req.file.path; // Store the file path in the database
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Profile picture is required",
+      });
+    }
     // Check if all required fields are provided
     if (!fullname || !email || !password) {
       return res.status(400).json({
