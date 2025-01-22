@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
 
 const schema = yup.object().shape({
   fullname: yup.string().required("Full name is required"),
@@ -51,6 +52,11 @@ const onsubmit = (data) => {
     for (let [key, value] of formData.entries()) {
       console.log(key, value);
     }
+
+    toast.success("formdata added successfully!", {
+      position: toast.POSITION?.TOP_RIGHT,
+      autoClose: 1000, // Auto close after 5 seconds
+    });
   } else {
     console.log("No file selected.");
   }

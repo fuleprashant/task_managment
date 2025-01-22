@@ -13,6 +13,8 @@ import AddTask from "./pages/AddTask";
 import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyOtp from "./pages/VerifyOtp";
+import { ToastContainer } from "react-toastify"; // Import components
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -76,6 +78,8 @@ const App = () => {
   return (
     <div>
       <RouterProvider router={router} />
+      {/* ToastContainer holds the toast notifications */}
+      <ToastContainer />
     </div>
   );
 };
