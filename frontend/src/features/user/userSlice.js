@@ -57,12 +57,10 @@ export const userSlice = createSlice({
     // handle login success
     loginSuccess: (state, action) => {
       state.user = action.payload.user;
-      state.isAuthenticated = true;
       state.loading = false;
 
       // Store the token and user data in localStorage
       localStorage.setItem("token", action.payload.token); // Store token
-      localStorage.setItem("user", JSON.stringify(action.payload.user)); // Store user data
     },
 
     // handle login failure

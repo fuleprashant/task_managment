@@ -1,8 +1,16 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import {
+  loginFailure,
+  loginStart,
+  loginSuccess,
+} from "../features/user/userSlice";
+import { toast } from "react-toastify";
 
 const schema = yup.object().shape({
   email: yup
@@ -17,11 +25,9 @@ const schema = yup.object().shape({
 
 // submit handler function
 
-const onSubmit = (data) => {
-  console.log("Form submitted successfully", data);
-};
-
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -29,6 +35,34 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  const onSubmit = async (data) => {
+    dispatch(loginStart());
+    const response = await axios.post(
+      "http://localhost:7985/user/login",
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    try {
+      dispatch(loginSuccess(response.data.data));
+      toast.success(response.data.message);
+      navigate("/");
+    } catch (error) {
+      // console.error("Login error:", error.response?.data || error.message);
+      if (error.response) {
+        dispatch(loginFailure(error.response.response.data));
+      }
+      toast.error(error.response.data.message);
+    }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-700">
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
