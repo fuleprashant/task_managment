@@ -239,6 +239,7 @@ export const login = async (req, res) => {
         name: user.fullname,
         email: user.email,
         token,
+        profilePicture: user.profilePicture,
       },
     });
   } catch (error) {
