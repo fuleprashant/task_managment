@@ -21,22 +21,8 @@ export const userSlice = createSlice({
     // Handle registration success
     registrationSuccess: (state, action) => {
       // Log the payload to check the structure
-      console.log("Payload in registrationSuccess:", action.payload);
 
       const user = action.payload.user;
-
-      if (user) {
-        // Safely create the user object with email and fullname
-        const theUser = {
-          email: user.email,
-          fullname: user.fullname,
-        };
-
-        // Store user data in localStorage if available
-        localStorage.setItem("user", JSON.stringify(theUser));
-      } else {
-        console.error("User data is missing in the payload.");
-      }
 
       state.user = user;
       state.loading = false;
@@ -56,11 +42,27 @@ export const userSlice = createSlice({
 
     // handle login success
     loginSuccess: (state, action) => {
-      state.user = action.payload.user;
+      const user = action.payload;
+
+      if (user) {
+        // Safely create the user object with email and fullname
+        const theUser = {
+          email: user.email,
+          fullname: user.name,
+        };
+
+        // Store user data in localStorage if available
+        localStorage.setItem("user", JSON.stringify(theUser));
+        localStorage.setItem("token", action.payload.token); // Store token
+      } else {
+        console.error("User data is missing in the payload.");
+      }
+
+      state.user = user;
       state.loading = false;
+      state.error = null;
 
       // Store the token and user data in localStorage
-      localStorage.setItem("token", action.payload.token); // Store token
     },
 
     // handle login failure

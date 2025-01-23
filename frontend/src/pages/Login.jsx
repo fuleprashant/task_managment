@@ -38,31 +38,34 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     dispatch(loginStart());
-    const response = await axios.post(
-      "http://localhost:7985/user/login",
-      {
-        email: data.email,
-        password: data.password,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      }
-    );
     try {
+      // Make the API request
+      const response = await axios.post(
+        "http://localhost:7985/user/login",
+        {
+          email: data.email,
+          password: data.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      console.log(response);
+      // If successful, handle success
       dispatch(loginSuccess(response.data.data));
       toast.success(response.data.message);
       navigate("/");
     } catch (error) {
-      // console.error("Login error:", error.response?.data || error.message);
-      if (error.response) {
-        dispatch(loginFailure(error.response.response.data));
-      }
-      toast.error(error.response.data.message);
+      // Handle errors properly
+      const errorMessage = error.response?.data?.message || "An error occurred";
+      dispatch(loginFailure(errorMessage));
+      toast.error(errorMessage);
     }
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-700">
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
