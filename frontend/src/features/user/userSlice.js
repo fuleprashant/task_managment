@@ -79,6 +79,11 @@ export const userSlice = createSlice({
 
     // Handle OTP verification success
     otpVerifySuccess: (state) => {
+      const updatedUser = {
+        ...state.user,
+        accountVerified: true,
+      };
+      state.user = updatedUser;
       state.otpVerified = true;
       state.loading = false;
     },
