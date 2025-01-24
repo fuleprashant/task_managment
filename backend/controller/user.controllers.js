@@ -285,7 +285,7 @@ export const forget_password = async (req, res) => {
 
     // OTP
     const otp = Math.floor(100000 + Math.random() * 900000);
-    console.log("+++++", otp);
+    console.log("OOOOOOOOOOOOOOOOOOO", otp);
     user.OTPforpassword = otp;
     user.OTpExpireforpassword = Date.now() + 10 * 60 * 1000; // 10 minutes = 600000 milliseconds
 
@@ -317,42 +317,34 @@ export const forget_password = async (req, res) => {
     });
   }
 };
-// reset-password
 export const reset_password = async (req, res) => {
-  const { OTPforpassword, newPassword } = req.body;
+  const { OTPforpassword, newPassword, confirmPassword } = req.body;
 
   try {
-    // Validate new password
     if (!newPassword || newPassword.length < 6) {
-      return res.status(400).json({
-        message: "Password must be at least 6 characters long.",
-      });
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters long." });
     }
 
-    // Find user by OTP and check expiration
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match." });
+    }
+
     const user = await User.findOne({
       OTPforpassword: Number(OTPforpassword),
-      OTpExpireforpassword: { $gt: Date.now() },
+      // OTPExpireForPassword: { $gt: Date.now() }, // Check if OTP is still valid
     });
 
     if (!user) {
-      return res.status(400).json({
-        message: "Invalid or expired OTP.",
-      });
+      return res.status(400).json({ message: "Invalid or expired OTP." });
     }
 
-    // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    // Update user's password
     user.password = hashedPassword;
-
-    // Save the updated user without validation errors
     await user.save({ validateModifiedOnly: true });
 
-    return res.status(200).json({
-      message: "Password reset successfully",
-    });
+    return res.status(200).json({ message: "Password reset successfully" });
   } catch (error) {
     console.error("Error resetting password:", error);
     return res.status(500).json({

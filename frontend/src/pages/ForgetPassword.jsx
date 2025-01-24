@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 // Validation schema for the form
 const schema = yup.object().shape({
@@ -24,9 +26,25 @@ const ForgetPassword = () => {
   const navigate = useNavigate();
 
   // Form submission handler
-  const onSubmit = (data) => {
-    console.log("Email submitted:", data.email);
-    navigate("/auth/verifyotp");
+  const onSubmit = async (data) => {
+    // console.log("Email submitted:", data.email);
+    const response = await axios.post(
+      "http://localhost:7985/user/forgetpassword",
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    toast.success(response.data.message);
+    navigate("/auth/resetpassword");
+    try {
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "An error occurred";
+      toast.error(errorMessage);
+    }
   };
 
   return (
