@@ -1,53 +1,155 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { CiHeart } from "react-icons/ci";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaTrashAlt, FaCheck, FaRegCheckCircle } from "react-icons/fa";
 import { IoHeartSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 const Card = ({ addData }) => {
+  const [tasks, setTasks] = useState([]);
   const navigate = useNavigate();
-  const data = [
-    { title: "Frontend", desc: "Add dynamic state in the code" },
-    { title: "Backend", desc: "Add the API to fetch the data." },
-    { title: "Database", desc: "Create a schema for the database." },
-    { title: "Server", desc: "Create a server for the application." },
-  ];
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get("http://localhost:7985/user/alltask", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setTasks(response.data.tasks || []);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchTasks();
+  }, [token]);
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:7985/user/deletetask/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setTasks((prevTasks) => prevTasks.filter((task) => task._id !== id));
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+
+  const handleEdit = (id) => {
+    console.log(`Editing task with ID: ${id}`);
+    // Add edit logic here
+  };
+
+  const handleImportantToggle = async (id, currentStatus) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:7985/user/important/${id}`,
+        { important: !currentStatus }, // Toggle the important state
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task._id === id ? { ...task, important: !currentStatus } : task
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling task importance:", error);
+    }
+  };
+
+  const handleCompletedToggle = async (id, currentStatus) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:7985/user/completed/${id}`,
+        { completed: !currentStatus }, // Toggle the completed state
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response)
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task._id === id ? { ...task, completed: !currentStatus } : task
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling task completion:", error);
+    }
+  };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 p-5">
-      {data.map((dat, idx) => (
-        <div
-          key={idx}
-          className="p-5 block bg-gray-500 border border-gray-500 rounded-lg shadow hover:bg-gray-700 "
-        >
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Task: {dat.title}
-          </h5>
-          <p className="font-normal text-gray-700 ">Description: {dat.desc}</p>
-          <div className="mt-4 space-x-6">
-            <button className="mr-2">
-              <FaEdit className="text-gray-600 dark:text-gray-300" />
-            </button>
-            <button className="mr-2">
-              <FaTrashAlt className="text-red-600" />
-            </button>
-            <button className="mr-2">
-              <IoHeartSharp className="text-red-400" />
-            </button>
-            <button>
-              <CiHeart className="text-gray-600 dark:text-gray-300" />
-            </button>
+    <div className="p-5">
+      <h2 className="text-2xl font-bold text-center mb-5 text-gray-800 dark:text-white">
+        Task List
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {tasks.map((task, idx) => (
+          <div
+            key={idx}
+            className="p-5 bg-white border border-gray-300 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 hover:shadow-lg transition-shadow"
+          >
+            <h5 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
+              Task - {task.task}
+            </h5>
+            <p className="text-gray-700 dark:text-gray-300">
+              Description - {task.description}
+            </p>
+            <div className="flex justify-between items-center mt-4">
+              <button onClick={() => handleEdit(task._id)}>
+                <FaEdit className="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400" />
+              </button>
+              <button onClick={() => handleDelete(task._id)}>
+                <FaTrashAlt className="text-red-500 hover:text-red-700" />
+              </button>
+              <button
+                onClick={() => handleImportantToggle(task._id, task.important)}
+              >
+                {task.important ? (
+                  <IoHeartSharp className="text-red-500 hover:text-red-700" />
+                ) : (
+                  <CiHeart className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-400" />
+                )}
+              </button>
+              <button
+                onClick={() => handleCompletedToggle(task._id, task.completed)}
+              >
+                {task.completed ? (
+                  <FaCheck className="text-green-500 hover:text-green-700" />
+                ) : (
+                  <FaRegCheckCircle className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-400" />
+                )}
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
-      {addData && (
-        <div
-          className="bg-gray-500 border rounded-lg shadow hover:bg-gray-700 h-40 w-64 flex justify-center items-center"
-          onClick={() => navigate("/addtask")}
-        >
-          <div className="text-center">ADD task</div>
-        </div>
-      )}
+        ))}
+        {addData && (
+          <div
+            className="flex items-center justify-center p-5 bg-gray-100 border border-dashed border-gray-400 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 hover:shadow-md cursor-pointer"
+            onClick={() => navigate("/addtask")}
+          >
+            <span className="text-center text-gray-600 dark:text-gray-300">
+              + Add New Task
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

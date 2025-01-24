@@ -39,7 +39,6 @@ const AddTask = () => {
         task: data.title,
         description: data.description,
       },
-
       {
         headers: {
           "Content-Type": "application/json",
