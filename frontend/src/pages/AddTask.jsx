@@ -2,6 +2,8 @@ import React from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const schema = yup.object().shape({
   title: yup.string().required("Please enter the TITLE of the task"),
@@ -16,12 +18,42 @@ const AddTask = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onsubmit = (data) => {
+  const onsubmit = async (data) => {
     console.log("data", data);
+    reset();
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("User is not authenticated");
+      // return;
+    }
+
+    const response = await axios.post(
+      "http://localhost:7985/user/create-task",
+      {
+        task: data.title,
+        description: data.description,
+      },
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    try {
+      console.log("the resposne ", response);
+      toast.success();
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
 
   return (
