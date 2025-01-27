@@ -5,7 +5,7 @@ import { FaEdit, FaTrashAlt, FaCheck, FaRegCheckCircle } from "react-icons/fa";
 import { IoHeartSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
-const Card = ({ addData }) => {
+const Card = ({ addData, task_type = "all" }) => {
   const [tasks, setTasks] = useState([]);
   const navigate = useNavigate();
 
@@ -20,7 +20,19 @@ const Card = ({ addData }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setTasks(response.data.tasks || []);
+        if (task_type === "all") {
+          setTasks(response.data.tasks || []);
+        } else if (task_type === "important") {
+          const importantTasks = response.data.tasks.filter(
+            (task) => task.important
+          );
+          setTasks(importantTasks);
+        } else if (task_type === "completed") {
+          const completedTask = response.data.tasks.filter(
+            (task) => task.completed
+          );
+          setTasks(completedTask);
+        }
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }

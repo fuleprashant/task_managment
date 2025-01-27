@@ -4,8 +4,7 @@ import Card from "../components/Card";
 const Important = () => {
   return (
     <div>
-     
-      <Card addData={false} />
+      <Card addData={false} task_type="important" />
     </div>
   );
 };
