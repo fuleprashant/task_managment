@@ -15,12 +15,17 @@ import ResetPassword from "./pages/ResetPassword";
 import VerifyOtp from "./pages/VerifyOtp";
 import { ToastContainer } from "react-toastify"; // Import components
 import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoute from "./protectedroutes/ProtectedRoute.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <FirstLayout />,
+      element: (
+        <ProtectedRoute>
+          <FirstLayout />
+        </ProtectedRoute>
+      ),
       children: [
         {
           path: "home",
