@@ -196,3 +196,38 @@ export const important = async (req, res) => {
       .json({ message: "Error occuring while important the Task" });
   }
 };
+
+export const singleUserTask = async (req, res) => {
+  const user = req.user; // Get the authenticated user from the request
+
+  if (!user) {
+    return res.status(400).json({ message: "User is not authenticated" });
+  }
+
+  const { taskId } = req.params; // Extract taskId from the URL parameters
+
+  if (!taskId) {
+    return res.status(400).json({ message: "Task ID is required" });
+  }
+
+  try {
+    // Fetch the task for the authenticated user with the specific taskId
+    const task = await Task.findOne({ userId: user._id, _id: taskId });
+
+    // If no task is found, return a 404
+    if (!task) {
+      return res.status(404).json({ message: "Task not found for this user" });
+    }
+
+    // Return the task
+    res.status(200).json({
+      message: "Task retrieved successfully",
+      task,
+    });
+  } catch (error) {
+    console.error("Error occurred while retrieving the task:", error);
+    res
+      .status(400)
+      .json({ message: "Error occurred while retrieving the task" });
+  }
+};

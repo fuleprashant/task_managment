@@ -46,6 +46,10 @@ const App = () => {
           path: "incompletedtask",
           element: <InCompleted />,
         },
+        {
+          path: "addtask/:id",
+          element: <AddTask />,
+        },
       ],
     },
     {

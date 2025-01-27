@@ -44,8 +44,7 @@ const Card = ({ addData }) => {
   };
 
   const handleEdit = (id) => {
-    console.log(`Editing task with ID: ${id}`);
-    // Add edit logic here
+    navigate(`/addtask/${id}`);
   };
 
   const handleImportantToggle = async (id, currentStatus) => {
@@ -83,7 +82,7 @@ const Card = ({ addData }) => {
           },
         }
       );
-      console.log(response)
+      console.log(response);
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
           task._id === id ? { ...task, completed: !currentStatus } : task

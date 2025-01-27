@@ -7,6 +7,7 @@ import {
   createTask,
   deleteTask,
   important,
+  singleUserTask,
   updateTask,
 } from "../controller/task.controllers.js";
 
@@ -18,5 +19,6 @@ taskRouter.delete("/deletetask/:taskId", useMiddleware, deleteTask);
 taskRouter.put("/updatetask/:taskId", useMiddleware, updateTask);
 taskRouter.put("/completed/:taskId", useMiddleware, complated);
 taskRouter.put("/important/:taskId", useMiddleware, important);
+taskRouter.get("/tasks/:taskId", useMiddleware, singleUserTask);
 
 export default taskRouter;
