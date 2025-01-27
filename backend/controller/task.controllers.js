@@ -197,37 +197,6 @@ export const important = async (req, res) => {
   }
 };
 
-// get all task of single user data
-
-export const AllTaskOfsingleUserTask = async (req, res) => {
-  const user = req.user; // Get the authenticated user from the request
-
-  if (!user) {
-    return res.status(400).json({ message: "User is not authenticated" });
-  }
-
-  try {
-    // Fetch the tasks for the authenticated user
-    const tasks = await Task.find({ userId: user._id });
-
-    // If no tasks are found, return a 404
-    if (tasks.length === 0) {
-      return res.status(404).json({ message: "No tasks found for this user" });
-    }
-
-    // Return the tasks
-    res.status(200).json({
-      message: "Tasks retrieved successfully",
-      tasks,
-    });
-  } catch (error) {
-    console.error("Error occurred while retrieving tasks:", error);
-    res.status(400).json({ message: "Error occurred while retrieving tasks" });
-  }
-};
-
-/// get data with user id and task id bcoz update form functionality
-
 export const singleUserTask = async (req, res) => {
   const user = req.user; // Get the authenticated user from the request
 
