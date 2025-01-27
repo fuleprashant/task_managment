@@ -1,6 +1,6 @@
 import React from "react";
 import { CiHome } from "react-icons/ci";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   MdIncompleteCircle,
   MdOutlineLabelImportant,
@@ -8,8 +8,10 @@ import {
 } from "react-icons/md";
 import { FaStarHalfAlt } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
+import axios from "axios";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const data = [
     {
       title: "Home",
@@ -38,6 +40,36 @@ const Sidebar = () => {
     },
   ];
 
+  const token = localStorage.getItem("token");
+
+  const handleDelete = async () => {
+    try {
+      // Call the logout API using axios
+      const response = await axios.get("http://localhost:7985/user/logout", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Check if the logout was successful
+      if (response.status === 200) {
+        console.log(response.data.message); // Log the success message
+
+        // Clear local storage
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        // Navigate to the login page
+        navigate("/auth/login");
+      } else {
+        console.error("Failed to log out:", response.statusText);
+      }
+    } catch (error) {
+      console.error("An error occurred during logout:", error);
+    }
+  };
+
   return (
     <div>
       <div className="space-y-5 font-thin w-full mt-40">
@@ -62,6 +94,7 @@ const Sidebar = () => {
             <NavLink
               to="auth/login"
               className=" text-white flex items-center gap-2  p-2 text-3xl rounded-md  "
+              onClick={handleDelete}
             >
               <FiLogOut size={24} />
               <div className="text-2xl">Logout</div>
