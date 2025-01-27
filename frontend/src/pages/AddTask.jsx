@@ -102,7 +102,7 @@ const AddTask = () => {
         );
         toast.success("Task added successfully!");
       }
-      navigate("/");
+      navigate("/alltask");
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
     }
