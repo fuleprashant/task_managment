@@ -32,6 +32,11 @@ const Card = ({ addData, task_type = "all" }) => {
             (task) => task.completed
           );
           setTasks(completedTask);
+        } else if (task_type === "Incompleted") {
+          const IncompletedTask = response.data.tasks.filter(
+            (task) => !task.completed
+          );
+          setTasks(IncompletedTask);
         }
       } catch (error) {
         console.error("Error fetching tasks:", error);

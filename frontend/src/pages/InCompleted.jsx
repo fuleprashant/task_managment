@@ -4,7 +4,7 @@ import Card from "../components/Card";
 const InCompleted = () => {
   return (
     <div>
-      <Card addData={false} />
+      <Card addData={false} task_type="Incompleted" />
     </div>
   );
 };
