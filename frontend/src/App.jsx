@@ -16,6 +16,7 @@ import VerifyOtp from "./pages/VerifyOtp";
 import { ToastContainer } from "react-toastify"; // Import components
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./protectedroutes/ProtectedRoute.jsx";
+import Dashboard from "./components/Dashboard.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -56,6 +57,10 @@ const App = () => {
           element: <AddTask />,
         },
       ],
+    },
+    {
+      path: "/dashboard",
+      element: <Dashboard />,
     },
     {
       path: "/auth",
