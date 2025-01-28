@@ -231,3 +231,17 @@ export const singleUserTask = async (req, res) => {
       .json({ message: "Error occurred while retrieving the task" });
   }
 };
+
+export const allTasksData = async (req, res) => {
+  // res.send("all task is fetched here ");
+  try {
+    const tasks = await Task.find(); // Fetch all users
+    if (tasks.length === 0) {
+      return res.status(404).json({ message: "No users found." });
+    }
+    res.status(200).json(tasks); // Return all users
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
