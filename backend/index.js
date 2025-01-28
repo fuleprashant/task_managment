@@ -22,8 +22,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser());
-// app.use("/user", userRouter);
-// app.use("/user", taskRouter);
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
@@ -32,6 +30,8 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+// app.use("/user", userRouter);
+// app.use("/user", taskRouter);
 app.use("/user", [userRouter, taskRouter]);
 
 app.listen(port, () => {

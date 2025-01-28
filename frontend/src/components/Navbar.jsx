@@ -6,9 +6,6 @@ const Navbar = ({ isSidebarVisible }) => {
   const userInfo = user ? JSON.parse(user) : { fullname: "Guest" }; // Fallback to "Guest" if no user info
 
   const profile = localStorage.getItem("profile");
-  const profileUrl = profile
-    ? `http://localhost:7985/${profile}` // Construct full profile URL
-    : "https://via.placeholder.com/150"; // Fallback placeholder image
 
   return (
     <div className="h-16 flex items-center justify-between mx-5">
@@ -29,7 +26,7 @@ const Navbar = ({ isSidebarVisible }) => {
         </div>
         <div>
           <img
-            src={profileUrl}
+            src={`http://localhost:7985/${profile}`}
             alt="User profile"
             className="w-12 h-12 rounded-full border-2 border-gray-300"
           />

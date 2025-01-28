@@ -8,6 +8,7 @@ import {
 } from "react-icons/md";
 import { FaStarHalfAlt } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
+import axios from "axios";
 
 const Sidebar = () => {
   const data = [
@@ -38,6 +39,28 @@ const Sidebar = () => {
     },
   ];
 
+  const token = localStorage.getItem("token");
+
+  const handleLogout = async () => {
+    try {
+      // Remove token and user data from localStorage
+
+      // Make a GET request to the logout endpoint
+      await axios.get("http://localhost:7985/user/logout", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("profile");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
+
   return (
     <div>
       <div className="space-y-5 font-thin w-full mt-40">
@@ -61,7 +84,8 @@ const Sidebar = () => {
           <div className=" ">
             <NavLink
               to="auth/login"
-              className=" text-white flex items-center gap-2  p-2 text-3xl rounded-md  "
+              className=" text-white flex items-center gap-2  p-2 text-3xl rounded-md"
+              onClick={handleLogout}
             >
               <FiLogOut size={24} />
               <div className="text-2xl">Logout</div>

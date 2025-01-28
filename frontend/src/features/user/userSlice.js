@@ -43,6 +43,7 @@ export const userSlice = createSlice({
     // handle login success
     loginSuccess: (state, action) => {
       const user = action.payload;
+      console.log("the user is the redux is", user);
 
       if (user) {
         // Safely create the user object with email and fullname
@@ -54,6 +55,7 @@ export const userSlice = createSlice({
         // Store user data in localStorage if available
         localStorage.setItem("user", JSON.stringify(theUser));
         localStorage.setItem("token", action.payload.token); // Store token
+        localStorage.setItem("profile", user.profilePicture);
       } else {
         console.error("User data is missing in the payload.");
       }
