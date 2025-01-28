@@ -1,6 +1,6 @@
 import React from "react";
 import { CiHome } from "react-icons/ci";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   MdIncompleteCircle,
   MdOutlineLabelImportant,
@@ -11,6 +11,7 @@ import { FiLogOut } from "react-icons/fi";
 import axios from "axios";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const data = [
     {
       title: "Home",
@@ -43,10 +44,8 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     try {
-      // Remove token and user data from localStorage
-
-      // Make a GET request to the logout endpoint
-      await axios.get("http://localhost:7985/user/logout", {
+      // Call the logout API using axios
+      const response = await axios.get("http://localhost:7985/user/logout", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
