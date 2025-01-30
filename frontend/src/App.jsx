@@ -17,6 +17,7 @@ import { ToastContainer } from "react-toastify"; // Import components
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./protectedroutes/ProtectedRoute.jsx";
 import Dashboard from "./components/Dashboard.jsx";
+import LoginUser from "./protectedroutes/LoginUser.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -68,11 +69,19 @@ const App = () => {
       children: [
         {
           path: "register",
-          element: <Register />,
+          element: (
+            <LoginUser>
+              <Register />,
+            </LoginUser>
+          ),
         },
         {
           path: "login",
-          element: <Login />,
+          element: (
+            <LoginUser>
+              <Login />,
+            </LoginUser>
+          ),
         },
         {
           path: "forgetpassword",

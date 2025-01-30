@@ -28,6 +28,8 @@ const Dashboard = () => {
   }, []); // Empty dependency array ensures this runs once on mount
 
   const usersTask = users.map((user) => {
+    // Ensure tasks are available before filtering
+    if (tasks.length === 0) return { fullname: user.fullname, tasks: [] };
     // Find tasks for each user
     const userTask = tasks.filter((task) => task.userId === user._id);
     return {
@@ -42,9 +44,14 @@ const Dashboard = () => {
         <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">
           Dashboard
         </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {usersTask.length > 0 ? (
-            usersTask.map((userWithTasks, index) => (
+
+        {users.length === 0 || tasks.length === 0 ? (
+          <p className="text-center text-gray-500">
+            Loading users and tasks...
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {usersTask.map((userWithTasks, index) => (
               <div
                 key={index}
                 className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
@@ -52,8 +59,9 @@ const Dashboard = () => {
                 <h2 className="text-xl font-semibold text-gray-800">
                   {userWithTasks.fullname}
                 </h2>
-                <div className="mt-4">
-                  {userWithTasks.tasks.length > 0 ? (
+                {/* Conditionally render tasks only if they exist */}
+                {userWithTasks.tasks.length > 0 ? (
+                  <div className="mt-4">
                     <ul className="space-y-4">
                       {userWithTasks.tasks.map((task) => (
                         <li
@@ -82,18 +90,15 @@ const Dashboard = () => {
                         </li>
                       ))}
                     </ul>
-                  ) : (
-                    <p className="text-gray-500">No tasks assigned</p>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  // Display a message if no tasks are assigned
+                  <p className="text-gray-500 mt-4">No tasks assigned</p>
+                )}
               </div>
-            ))
-          ) : (
-            <p className="text-center text-gray-500">
-              Loading users and tasks...
-            </p>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
